@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="jquery.js" charset="utf-8"></script>
+
+    <style>
+      * {
+        transition: all 0.6s ease;
+      }
+
+      html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+
+      body {
+        display: flex;
+      }
+
+      section {
+        position: relative;
+        overflow: hidden;
+        width: 80vh;
+        height: 90vh;
+        margin: auto;
+        background: white;
+        box-shadow: 0px 5px 30px 0px rgba(0,0,0,0.80);
+      }
+
+      div {
+        position: absolute;
+        will-change: transform;
+      }
+    </style>
+
+    <script type="text/javascript">
+      function generateRectangles(quantity) {
+        const element = "<div></div>"
+        let elements = ""
+        let step
+
+        for (step = 0; step < quantity; step++) {
+          elements += element
+        }
+
+        $("#artwork").append(elements)
+      }
+
+      function getRandomArbitrary(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min
+      }
+
+      function generatePercent(limit) {
+        let number = Math.round(Math.random() * limit)
+        return number
+      }
+
+      function generateSize() {
+        return generatePercent(95)
+      }
+
+      function generateShift(size) {
+        let limit = 100 - size
+        return generatePercent(limit)
+      }
+
+      function generateColorChannel() {
+        return getRandomArbitrary(100, 256)
+      }
+
+      function generateColor() {
+        const r = generateColorChannel()
+        const g = generateColorChannel()
+        const b = generateColorChannel()
+        // let colorArray = [r, g, b]
+        // const random = Math.floor(Math.random() * colorArray.length)
+        // colorArray[random] = 0
+        // const colorCSS = "rgb(" + colorArray.join() + ")"
+        //
+        // return colorCSS
+      }
+
+      function changeRectangleCSS(element) {
+        const width  = generateSize()
+        const height = generateSize()
+        const x = generateShift(width) + "%"
+        const y = generateShift(height) + "%"
+        const translate = [x, y].join()
+        const scale = Math.random() * (1.5 - 0.2) + 0.2
+        const rotate = 0 // Math.random() * (360 - 0) + 0
+        const skewX = 0 // Math.random() * (360 - 0) + 0
+        const skewY = 0 // Math.random() * (360 - 0) + 0
+
+        element.css({
+          // "top":              generateShift(height) + "%",
+          // "left":             generateShift(width) + "%",
+          "transform":        "translate(" + translate + ") translateZ(0) scale(" + scale + ")" + "rotate(" + rotate + "deg)" + "skewX(" + skewX + "deg)" + "skewY(" + skewY + "deg)",
+          "width":            width + "%",
+          "height":           height + "%",
+          "background-color": generateColor()
+        })
+      }
+      //
+      function changeRectanglesCSS() {
+        $("div").each(function() {
+          changeRectangleCSS($(this))
+        })
+      }
+
+      function changeRectangleOnTime() {
+        setTimeout(function() {
+          changeRectanglesCSS()
+          changeRectangleOnTime()
+        }, 600)
+      }
+
+      $(function() {
+        generateRectangles(10)
+        changeRectangleOnTime()
+      })
+    </script>
+  </head>
+
+  <body>
+    <section id="artwork">
+      <div><img src="img/man.png"></div>
+      <div><img src="img/man1.png"></div>
+      <div><img src="img/man2.png"></div>
+      <div><img src="img/holon.png"></div></section>
+  </body>
+</html>
